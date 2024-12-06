@@ -26,10 +26,10 @@ M.fallback_colors = extend_tbl({
   bright_red = "#ec5f67",
   white = "#c9c9c9",
   yellow = "#e5c07b",
-  bright_yellow = "#ebae34"
+  bright_yellow = "#ebae34",
 }, config.colors)
 
-M.modes = {
+M.modes = extend_tbl({
   ["n"] = { " NORMAL ", "normal" },
   ["no"] = { " OP ", "normal" },
   ["nov"] = { " OP ", "normal" },
@@ -64,9 +64,9 @@ M.modes = {
   ["r?"] = { " CONFIRM ", "inactive" },
   ["!"] = { " SHELL ", "inactive" },
   ["null"] = { " null ", "inactive" },
-}
+}, config.modes)
 
-M.separators = {
+M.separators = extend_tbl({
   none = { "", "" },
   left = { "", "  " },
   right = { "  ", "" },
@@ -74,7 +74,7 @@ M.separators = {
   tab = { "", " " },
   breadcrumbs = " " .. get_icon("BreadcrumbSeparator") .. " ",
   path = " " .. get_icon("PathSeparator") .. " ",
-}
+}, config.separators)
 
 M.attributes = {
   buffer_active = { bold = true, italic = false },
@@ -82,7 +82,7 @@ M.attributes = {
   macro_recording = { bold = true },
   git_branch = { bold = true },
   git_diff = { bold = true },
-  virtual_env = { bold = true }
+  virtual_env = { bold = true },
 }
 
 M.icon_highlights = {
@@ -120,25 +120,25 @@ local gitsigns = function(_)
   local gitsigns_avail, gitsigns = pcall(require, "gitsigns")
   if gitsigns_avail then vim.schedule(gitsigns.preview_hunk) end
 end
-for _, sign in ipairs {
+for _, sign in ipairs({
   "Topdelete",
   "Untracked",
   "Add",
   "Changedelete",
   "Delete",
-} do
+}) do
   local name = "GitSigns" .. sign
   if not M.sign_handlers[name] then M.sign_handlers[name] = gitsigns end
 end
 -- diagnostic handlers
 local diagnostics = function(args)
-  if args.mods:find "c" then
+  if args.mods:find("c") then
     vim.schedule(vim.lsp.buf.code_action)
   else
     vim.schedule(vim.diagnostic.open_float)
   end
 end
-for _, sign in ipairs { "Error", "Hint", "Info", "Warn" } do
+for _, sign in ipairs({ "Error", "Hint", "Info", "Warn" }) do
   local name = "DiagnosticSign" .. sign
   if not M.sign_handlers[name] then M.sign_handlers[name] = diagnostics end
 end
@@ -147,7 +147,7 @@ local dap_breakpoint = function(_)
   local dap_avail, dap = pcall(require, "dap")
   if dap_avail then vim.schedule(dap.toggle_breakpoint) end
 end
-for _, sign in ipairs { "", "Rejected", "Condition" } do
+for _, sign in ipairs({ "", "Rejected", "Condition" }) do
   local name = "DapBreakpoint" .. sign
   if not M.sign_handlers[name] then M.sign_handlers[name] = dap_breakpoint end
 end

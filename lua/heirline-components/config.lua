@@ -70,6 +70,10 @@ function M.set(opts)
   --- user defined > colorscheme → fallback_colors
   M.colors = opts.colors or nil
 
+  M.modes = opts.modes or nil
+
+  M.separators = opts.separators or nil
+
   -- expose the config as global
   vim.g.heirline_components_config = M
 end
